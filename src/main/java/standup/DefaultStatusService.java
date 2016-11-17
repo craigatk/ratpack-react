@@ -18,25 +18,21 @@ class DefaultStatusService implements StatusService {
 
     @Override
     public Promise<Status> create(Status newStatus) {
-        return Blocking.get(() -> createStatus(newStatus));
-    }
+        return Blocking.get(() -> {
+            StatusDAO statusDAO = dbi.open(StatusDAO.class);
 
-    private Status createStatus(Status newStatus) {
-        StatusDAO statusDAO = dbi.open(StatusDAO.class);
+            statusDAO.create(newStatus.getName(), newStatus.getYesterday(), newStatus.getToday(), newStatus.getImpediments());
 
-        statusDAO.create(newStatus.getName(), newStatus.getYesterday(), newStatus.getToday(), newStatus.getImpediments());
-
-        return newStatus;
+            return newStatus;
+        });
     }
 
     @Override
     public Promise<List<Status>> list() {
-        return Blocking.get(() -> listStatuses());
-    }
+        return Blocking.get(() -> {
+            StatusDAO statusDAO = dbi.open(StatusDAO.class);
 
-    private List<Status> listStatuses() {
-        StatusDAO statusDAO = dbi.open(StatusDAO.class);
-
-        return statusDAO.list();
+            return statusDAO.list();
+        });
     }
 }

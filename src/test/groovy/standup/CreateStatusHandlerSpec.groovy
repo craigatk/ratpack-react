@@ -16,7 +16,7 @@ class CreateStatusHandlerSpec extends Specification {
 
     void "should create new status"() {
         given:
-        Status statusToCreate = new Status(name: 'My Name', yesterday: 'Yesterday', today: 'Today', impediments: 'None', dateCreated: new Date())
+        Status statusToCreate = new Status(name: 'My Name', yesterday: 'Yesterday', today: 'Today', impediments: 'None')
 
         String statusJson = JsonOutput.toJson(statusToCreate)
 
