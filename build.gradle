@@ -9,6 +9,7 @@ buildscript {
 
 apply plugin: "io.ratpack.ratpack-java"
 apply plugin: "idea"
+apply plugin: 'groovy'
 
 repositories {
   jcenter()
@@ -19,7 +20,27 @@ task wrapper(type: Wrapper) {
 }
 
 dependencies {
+  compile ratpack.dependency("guice")
+  compile 'com.h2database:h2:1.4.190'
+  compile 'org.jdbi:jdbi:2.77'
+  compile 'org.flywaydb:flyway-core:4.0.3'
+
   runtime "org.slf4j:slf4j-simple:1.7.21"
+
+  testCompile ratpack.dependency('test')
+  testCompile 'org.spockframework:spock-core:1.0-groovy-2.4'
+  testCompile 'cglib:cglib:2.2.2'
+  testCompile 'org.objenesis:objenesis:2.1'
+
+  testCompile("org.gebish:geb-spock:1.0")
+  testCompile "org.seleniumhq.selenium:selenium-chrome-driver:2.53.1"
+  testCompile "org.seleniumhq.selenium:selenium-firefox-driver:2.53.1"
+
+  // For downloading browser-specific drivers that browsers like Chrome and IE require
+  // From https://github.com/bonigarcia/webdrivermanager
+  testCompile("io.github.bonigarcia:webdrivermanager:1.4.9") {
+    exclude group: 'org.seleniumhq.selenium'
+  }
 }
 
-mainClassName = "my.app.Main"
+mainClassName = "standup.Main"
