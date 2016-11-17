@@ -30,6 +30,11 @@ class StandupApiSpec extends Specification {
         then:
         assert postResponse.statusCode == 200
 
+        def postResponseJson = jsonSlurper.parseText(postResponse.body.text)
+        assert postResponseJson.name == newStatus.name
+        assert postResponseJson.yesterday == newStatus.yesterday
+        assert postResponseJson.today == newStatus.today
+
         when:
         def getAllResponse = aut.httpClient.get('api/status/all')
 
@@ -37,14 +42,14 @@ class StandupApiSpec extends Specification {
         assert getAllResponse.statusCode == 200
 
         when:
-        def parsedJson = jsonSlurper.parseText(getAllResponse.body.text)
+        def getAllResponseJson = jsonSlurper.parseText(getAllResponse.body.text)
 
-        List<Status> allStatusList = parsedJson as List
+        List<Status> allStatusList = getAllResponseJson as List
 
         then:
         assert allStatusList.size() == 1
 
-        assert allStatusList[0].name == 'Craig Atkinson'
+        assert allStatusList[0].name == newStatus.name
         assert allStatusList[0].yesterday == newStatus.yesterday
         assert allStatusList[0].today == newStatus.today
     }
